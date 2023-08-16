@@ -1,28 +1,33 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        StringBuilder sb = new StringBuilder();
-        int T = sc.nextInt();
 
-        for (int i = 0; i < T; i++) {
-            Long N = sc.nextLong();
-            Long M = sc.nextLong();
+    public static long gcd(int x, int y) {
 
-            Long minVal = (long) Math.min(N, M);
-            Long maxVal = (long) Math.max(N, M);
-
-            int count = 1;
-            while(true) {
-                Long val = maxVal * count;
-                if (val % minVal == 0) {
-                    sb.append(val).append("\n");
-                    break;
-                }
-                count++;
-            }
+        if (y == 0) {
+            return x;
         }
-        System.out.println(sb);
+        return gcd(y, x % y);
+
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
+        int n = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < n; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            long lcm = ((long)a * b / gcd(a, b));
+            
+            System.out.println(lcm);
+        }
     }
 }
