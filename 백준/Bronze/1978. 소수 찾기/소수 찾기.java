@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Main {
@@ -18,17 +21,24 @@ public class Main {
         return true;
     }
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int num = sc.nextInt();
+        int N = Integer.parseInt(br.readLine());
+
+        int[] arr = new int[N];
+
+        String[] str = br.readLine().split(" ");
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = Integer.parseInt(str[i]);
+        }
 
         int count = 0;
-        for (int i = 0; i < num; i++) {
-             int val = sc.nextInt();
-             if (isPrime(val))
-                 count++;
+        for (int i = 0; i < arr.length; i++){
+            int val = arr[i];
+            if (isPrime(val)) count++;
         }
+
         System.out.println(count);
     }
 }
