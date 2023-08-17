@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static boolean decimal(int num) {
+    public static boolean isPrime(int num) {
         if (num < 2)
             return false;
 
@@ -26,7 +26,7 @@ public class Main {
         int count = 0;
         for (int i = 0; i < num; i++) {
              int val = sc.nextInt();
-             if (decimal(val))
+             if (isPrime(val))
                  count++;
         }
         System.out.println(count);
