@@ -3,12 +3,12 @@ public class Main {
     private static double correctCount = 0;
 
     private static final String[][] TESTCASES = new String[][] {
-            {"123", "123", "246"},
-            {"1000", "1", "2"},
-            {"456", "789", "1461"},
-            {"5", "5", "1"},
-            {"11112", "54321", "65433"},
-            {"3829", "1300", "4139"}
+            { "123", "123", "246" },
+            { "1000", "1", "2" },
+            { "456", "789", "1461" },
+            { "5", "5", "1" },
+            { "11112", "54321", "65433" },
+            { "3829", "1300", "4139" }
     };
 
     public static void main(String[] args) {
@@ -30,6 +30,7 @@ public class Main {
 
     // solution
     public static int solution(int a, int b) {
+        // return recursion(recursion(a) + recursion(b));
         return reverse(reverse(a) + reverse(b));
     }
 
@@ -42,4 +43,21 @@ public class Main {
         }
         return Integer.parseInt(sb.toString());
     }
+
+   
+    // recursive function
+    static int recursion(int n) {
+        int result = 0;
+        return recursiveFunction(n, result);
+    }
+
+    static int recursiveFunction(int n, int result) {
+        if (n == 0) {
+            return result;
+        }
+        int digit = n % 10;
+        result = result * 10 + digit;
+        return recursiveFunction(n / 10, result);
+    }
+
 }
