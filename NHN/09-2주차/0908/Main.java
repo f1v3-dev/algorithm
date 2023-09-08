@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Main {
 
     public static int solution(int start, int end) {
@@ -15,13 +17,26 @@ public class Main {
         return count;
     }
 
+    /**
+     * 30
+     * -> 1 * 30
+     * -> 2 * 15
+     * -> 3 * 10
+     * -> 5 * 6
+     */
     private static boolean isPrime(int num) {
 
-        if (num == 1) {
+        if (num < 2) {
             return false;
         }
 
-        for (int i = 2; i < num; i++) {
+        // for (int i = 2; i < num; i++) {
+        //     if (num % i == 0) {
+        //         return false;
+        //     }
+        // }
+
+        for (int i = 2; i * i <= num; i++) {
             if (num % i == 0) {
                 return false;
             }
@@ -36,6 +51,26 @@ public class Main {
         }
 
         System.out.printf("정답률 = %.3f%%", (correct / TEST_CASES.length * 100));
+
+        int[] arr = new int[101];
+        boolean[] prime = new boolean[101];
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i;
+        }
+
+        prime[0] = true;
+        prime[1] = true;
+
+        for(int i = 2; i < Math.sqrt(arr.length); i++) {
+            if (!isPrime(i)) {
+                for (int j = i; j < arr.length; j += i) {
+                    prime[j] = true;
+                }
+            }
+        }
+
+        System.out.println(Arrays.toString(prime));
     }
 
 
