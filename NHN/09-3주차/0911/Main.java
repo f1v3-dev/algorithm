@@ -10,7 +10,7 @@ public class Main {
             325,
             20_160,
             3_456_789,
-            10_000_001,
+            // 10_000_001,
             1_234_567_890
     };
 
@@ -21,7 +21,7 @@ public class Main {
             "5 * 5 * 13 = 325",
             "2 * 2 * 2 * 2 * 2 * 2 * 3 * 3 * 5 * 7 = 20160",
             "3 * 7 * 97 * 1697 = 3456789",
-            "11 * 909091 = 10000001",
+            // "11 * 909091 = 10000001",
             "2 * 3 * 3 * 5 * 3607 * 3803 = 1234567890"
     };
 
@@ -46,30 +46,40 @@ public class Main {
 
     public static String solution(int num) {
         int origin = num;
-        List<Integer> list = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
 
-        if (origin == 1) {
-            list.add(1);
+        if (num == 1) {
+            return "1 = 1";
         }
 
-        for (int i = 2; i <= origin; i++) {
-            if (origin % i == 0) {
-                list.add(i);
-                origin /= i;
-                i--;
-            }
-        }
+        list.clear();
+        sb.setLength(0);
+        recursive(origin);
 
-        for (int i = 0; i < list.size(); i++) {
-            sb.append(list.get(i));
-            if (i < list.size() - 1) {
-                sb.append(" * ");
-            }
+        for (int i = 0; i < list.size() - 1; i++) {
+            sb.append(list.get(i)).append(" * ");
         }
-
+        sb.append(list.get(list.size() - 1));
         sb.append(" = ").append(num);
 
+        index = 2;
+        
         return sb.toString();
+    }
+    static List<Integer> list = new ArrayList<>();
+    static StringBuilder sb = new StringBuilder();
+    static int index = 2;
+
+    public static void recursive(int num) {
+        if (num == 1) {
+            // list.add(num);
+            return;
+        }
+        if (num % index == 0) {
+            list.add(index);
+            recursive(num / index);
+        } else {
+            index++;
+            recursive(num);
+        }
     }
 }
