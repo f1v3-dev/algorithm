@@ -1,0 +1,4 @@
+SELECT substr(product_code, 1, 2) AS CATEGORY, count(product_id)
+FROM PRODUCT
+GROUP BY CATEGORY
+ORDER BY CATEGORY ASC;
