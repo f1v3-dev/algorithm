@@ -10,10 +10,12 @@ class MedalComparator implements Comparator<Country> {
 
     @Override
     public int compare(Country o1, Country o2) {
-        return Comparator.comparing(Country::getGold)
-                .thenComparing(Country::getSilver)
-                .thenComparing(Country::getBronze)
-                .compare(o1, o2);
+        if (o1.getGold() != o2.getGold())
+            return Integer.compare(o2.getGold(), o1.getGold());
+        else if (o1.getSilver() != o2.getSilver())
+            return Integer.compare(o2.getSilver(), o1.getSilver());
+        else
+            return Integer.compare(o2.getBronze(), o1.getBronze());
     }
 }
 
