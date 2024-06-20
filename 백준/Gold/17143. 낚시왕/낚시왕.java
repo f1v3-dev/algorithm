@@ -88,8 +88,7 @@ public class Main {
     private static void moveShark() {
         // 상어는 주어진 속도로 이동
         // 이동하려는 칸이 격자판의 경계를 넘는 경우 방향을 반대로 변경
-        sharks.stream().parallel()
-                .forEach(Main::move);
+        sharks.forEach(Main::move);
 
         // 같은 위치에 있는 상어 중 크기가 가장 큰 상어만 남기기
         Map<String, Shark> sharkMap = new HashMap<>();
