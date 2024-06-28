@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
 
@@ -66,9 +63,7 @@ public class Main {
 
         // 최단경로를 저장할 배열
         int[] dist = new int[v + 1];
-        for (int i = 0; i < dist.length; i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
+        Arrays.fill(dist, Integer.MAX_VALUE);
 
         // 시작 지점을 정하기
         dist[start] = 0;
@@ -96,14 +91,10 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < dist.length; i++) {
-            if (dist[i] == Integer.MAX_VALUE) {
-                sb.append("INF").append("\n");
-            } else {
-                sb.append(dist[i]).append("\n");
-            }
+            sb.append(dist[i] == Integer.MAX_VALUE ? "INF" : dist[i]).append("\n");
         }
 
         System.out.println(sb);
     }
-    
+
 }
