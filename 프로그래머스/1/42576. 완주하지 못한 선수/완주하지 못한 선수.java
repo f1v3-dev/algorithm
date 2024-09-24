@@ -1,30 +1,23 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Solution {
-public String solution(String[] participant, String[] completion) {
-
-        // 참가자 - 완주자
-        Map<String, Integer> member = new HashMap<>();
-
-        for (String mem : participant) {
-            member.put(mem, member.getOrDefault(mem, 0) + 1);
+    public String solution(String[] participant, String[] completion) {
+        Map<String, Integer> map = new HashMap<>();
+        
+        for (String name : participant) {
+            map.put(name, map.getOrDefault(name, 0) + 1);
         }
-
-        for (String complete : completion) {
-            if (member.get(complete) > 1) {
-                member.put(complete, member.getOrDefault(complete, 0) - 1);
-                continue;
-            }
-            member.remove(complete);
+        
+        for (String name : completion) {
+            map.put(name, map.get(name) - 1);
         }
-
-        StringBuilder sb = new StringBuilder();
-        for (String mem : member.keySet()) {
-            System.out.println(mem);
-            sb.append(mem);
-        }
-
-        return sb.toString();
+        
+        return map.entrySet()
+            .stream()
+            .filter(e -> e.getValue() > 0)
+            .findFirst()
+            .map(e -> e.getKey())
+            .orElse(null);
+            
     }
 }
