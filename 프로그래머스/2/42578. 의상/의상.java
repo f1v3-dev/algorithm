@@ -1,20 +1,21 @@
-import java.util.HashMap;
+import java.util.*;
 
 class Solution {
     public int solution(String[][] clothes) {
         int answer = 1;
+        Map<String, Integer> map = new HashMap<>();
         
-        HashMap<String, Integer> hm = new HashMap<>();
-
-        for (int i = 0; i < clothes.length; i++) {
-            hm.put(clothes[i][1], hm.getOrDefault(clothes[i][1], 1) + 1);
+        for (String[] arr : clothes) {
+            String key = arr[1];
+            map.put(key, map.getOrDefault(key, 0) + 1);
         }
-
-        for (Integer value : hm.values()) {
-            answer *= value;
+        
+        for (Integer value : map.values()) {
+            // 선택하지 않은 경우도 + 1
+            answer *= value + 1;
         }
-
+        
+        // 전체 모두를 선택하지 않은 경우를 빼줘야 한다.
         return answer - 1;
-
-    } 
+    }
 }
