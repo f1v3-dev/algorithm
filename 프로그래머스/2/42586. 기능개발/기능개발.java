@@ -2,43 +2,48 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        List<Integer> answer = new ArrayList<>();
+        List<Integer> counts = new ArrayList<>();
 
-        Stack<Integer> stack = new Stack<>();
 
-        for (int i = progresses.length - 1; i >= 0; i--) {
-            stack.push(progresses[i]);
+        Queue<Integer> queue = new LinkedList<>();
+        for (int progress : progresses) {
+            queue.offer(progress);
         }
 
         int index = 0;
-        while (!stack.isEmpty()) {
-            Integer num = stack.pop();
+        while (!queue.isEmpty()) {
 
-            int count = 0;
-            int result = 1;
-            while (num < 100) {
-                count++;
-                num += speeds[index];
+            Integer current = queue.poll();
+            int count = 1;
+            int day = 0;
+            int speed = speeds[index];
+
+            while (current < 100) {
+                day++;
+                current += speed;
             }
 
+            // 다음 인덱스로 이동
             index++;
 
-            while (!stack.isEmpty()) {
-                Integer peek = stack.peek();
-                if (speeds[index] * count + peek >= 100) {
-                    stack.pop();
-                    result++;
+            while (!queue.isEmpty()) {
+                Integer peek = queue.peek();
+                int nextProgress = peek + (day * speeds[index]);
+                if (nextProgress >= 100) {
+                    queue.poll();
                     index++;
-                } else {
-                    break;
+                    count++;
+                    continue;
                 }
+
+                break;
             }
 
-            answer.add(result);
+            counts.add(count);
         }
 
-        return answer.stream()
-                .mapToInt(i -> i)
+        return counts.stream()
+                .mapToInt(Integer::intValue)
                 .toArray();
     }
 }
