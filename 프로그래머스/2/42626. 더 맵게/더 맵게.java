@@ -4,19 +4,23 @@ class Solution {
     public int solution(int[] scoville, int K) {
         int answer = 0;
 
-        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        Queue<Integer> queue = new PriorityQueue<>();
 
-        for (int sco : scoville) {
-            queue.offer(sco);
+        for (int num : scoville) {
+            queue.offer(num);
         }
 
         while (queue.peek() < K) {
-            if (queue.size() == 1) {
+            if (queue.size() <= 1) {
                 return -1;
             }
+
             Integer first = queue.poll();
             Integer second = queue.poll();
-            queue.offer(first + (second * 2));
+
+            int newScoville = first + (second * 2);
+            queue.offer(newScoville);
+
             answer++;
         }
 
