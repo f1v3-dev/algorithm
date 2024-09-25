@@ -1,47 +1,41 @@
-import java.util.*;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 class Solution {
     public int[] solution(String[] operations) {
-        int[] answer = {0, 0};
 
-        // 우선순위 큐 생성
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
-
+        Queue<Integer> minQueue = new PriorityQueue<>();
+        Queue<Integer> maxQueue = new PriorityQueue<>(Comparator.reverseOrder());
 
         for (String operation : operations) {
-            String[] op = operation.split(" ");
-            String command = op[0];
-            int value = Integer.parseInt(op[1]);
+            String[] split = operation.split(" ");
+            String op = split[0];
+            int value = Integer.parseInt(split[1]);
 
-            switch (command) {
-                case "I":
-                    minHeap.add(value);
-                    maxHeap.add(value);
-                    break;
-
-                case "D":
-                    // 큐에서 최댓값 삭제
-                    if (value == 1 && (!maxHeap.isEmpty())) {
-                        Integer max = maxHeap.poll();
-                        minHeap.remove(max);
+            switch (op) {
+                case "I" -> {
+                    minQueue.offer(value);
+                    maxQueue.offer(value);
+                }
+                case "D" -> {
+                    if (value == 1 && (!maxQueue.isEmpty())) {
+                        Integer max = maxQueue.poll();
+                        minQueue.remove(max);
                     }
 
-                    // 큐에서 최솟값 삭제
-                    if (value == -1 && (!minHeap.isEmpty())) {
-                        Integer min = minHeap.poll();
-                        maxHeap.remove(min);
+                    if (value == -1 && (!minQueue.isEmpty())) {
+                        Integer min = minQueue.poll();
+                        maxQueue.remove(min);
                     }
-                    break;
-                    
-                default:
-                    throw new IllegalStateException("Unexpected value: " + command);
+                }
             }
         }
+        int[] answer = new int[2];
 
-        if (!maxHeap.isEmpty() && !minHeap.isEmpty()) {
-            answer[0] = maxHeap.poll();
-            answer[1] = minHeap.poll();
+        if (!maxQueue.isEmpty() && !minQueue.isEmpty()) {
+            answer[0] = maxQueue.poll();
+            answer[1] = minQueue.poll();
         }
 
         return answer;
