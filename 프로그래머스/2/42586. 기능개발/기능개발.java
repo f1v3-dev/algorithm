@@ -1,49 +1,44 @@
 import java.util.*;
 
+class Work {
+    int progress;
+    int speed;
+    
+    public Work(int progress, int speed) {
+        this.progress = progress;
+        this.speed = speed;
+    }
+}
+
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        List<Integer> counts = new ArrayList<>();
-
-
-        Queue<Integer> queue = new LinkedList<>();
-        for (int progress : progresses) {
-            queue.offer(progress);
+        
+        List<Integer> result = new ArrayList<>();
+        Queue<Work> queue = new LinkedList<>();
+        
+        for (int i = 0; i < speeds.length; i++) {
+            Work work = new Work(progresses[i], speeds[i]);
+            queue.offer(work);
         }
-
-        int index = 0;
+        
         while (!queue.isEmpty()) {
-
-            Integer current = queue.poll();
+            
+            Work cur = queue.poll();
             int count = 1;
-            int day = 0;
-            int speed = speeds[index];
-
-            while (current < 100) {
-                day++;
-                current += speed;
+            int day = (int) Math.ceil((100 - cur.progress) / (double) cur.speed);
+            
+            while (!queue.isEmpty() &&
+                  queue.peek().progress + (queue.peek().speed * day) >= 100) {
+                
+                count++;
+                queue.poll();
             }
-
-            // 다음 인덱스로 이동
-            index++;
-
-            while (!queue.isEmpty()) {
-                Integer peek = queue.peek();
-                int nextProgress = peek + (day * speeds[index]);
-                if (nextProgress >= 100) {
-                    queue.poll();
-                    index++;
-                    count++;
-                    continue;
-                }
-
-                break;
-            }
-
-            counts.add(count);
+            
+            result.add(count);
         }
-
-        return counts.stream()
-                .mapToInt(Integer::intValue)
-                .toArray();
+        
+        return result.stream()
+            .mapToInt(i -> i)
+            .toArray();
     }
 }
