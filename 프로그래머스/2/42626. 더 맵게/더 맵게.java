@@ -3,27 +3,31 @@ import java.util.*;
 class Solution {
     public int solution(int[] scoville, int K) {
         int answer = 0;
-
-        Queue<Integer> queue = new PriorityQueue<>();
-
-        for (int num : scoville) {
-            queue.offer(num);
+        
+        Queue<Integer> pq = new PriorityQueue<>();
+        
+        for (int sco : scoville) {
+            pq.offer(sco);
         }
-
-        while (queue.peek() < K) {
-            if (queue.size() <= 1) {
-                return -1;
+        
+        while (!pq.isEmpty() && !(pq.peek() >= K)) {
+            
+            int first = pq.poll();
+            
+            if (pq.isEmpty()) {
+                break;
             }
-
-            Integer first = queue.poll();
-            Integer second = queue.poll();
-
-            int newScoville = first + (second * 2);
-            queue.offer(newScoville);
-
+            
+            int second = pq.poll();
+            
+            pq.offer(first + (second * 2));
             answer++;
         }
-
+        
+        if (pq.isEmpty()) {
+            return -1;
+        }
+        
         return answer;
     }
 }
