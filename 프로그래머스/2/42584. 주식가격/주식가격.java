@@ -1,34 +1,28 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] prices) {
-        Queue<Integer> queue = new LinkedList<>();
 
-        // 1. queue -> push prices
+        Queue<Integer> queue = new LinkedList<>();
         for (int price : prices) {
             queue.offer(price);
         }
 
-        int[] result = new int[prices.length];
+        int[] answer = new int[prices.length];
 
-        for (int i = 0; !queue.isEmpty(); i++) {
+        for (int i = 0; i < prices.length; i++) {
             int price = queue.poll();
             int count = 0;
-
             for (int j = i + 1; j < prices.length; j++) {
-                if (price <= prices[j]) {
-                    count++;
-                } else {
-                    count++;
+                count++;
+                if (price > prices[j]) {
                     break;
                 }
             }
 
-            result[prices.length - queue.size() - 1] = count;
+            answer[i] = count;
         }
 
-
-        return result;
+        return answer;
     }
 }
