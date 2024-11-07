@@ -2,33 +2,28 @@ import java.util.*;
 
 class Solution {
     public String solution(String[] cards1, String[] cards2, String[] goal) {
-        Queue<String> firstQueue = new LinkedList<>();
-        Queue<String> secondQueue = new LinkedList<>();
+        Queue<String> queue1 = new LinkedList<>();
+        Queue<String> queue2 = new LinkedList<>();
         
         for (String card : cards1) {
-            firstQueue.offer(card);
+            queue1.offer(card);
         }
         
         for (String card : cards2) {
-            secondQueue.offer(card);
+            queue2.offer(card);
         }
-        
-        String answer = "Yes";
         
         for (String word : goal) {
             
-            if (word.equals(firstQueue.peek())) {
-                firstQueue.poll();
-                continue;
-            } else if (word.equals(secondQueue.peek())) {
-                secondQueue.poll();
-                continue;
+            if (!queue1.isEmpty() && word.equals(queue1.peek())) {
+                queue1.poll();
+            } else if (!queue2.isEmpty() && word.equals(queue2.peek())) {
+                queue2.poll();
             } else {
-                answer = "No";
-                break;
+                return "No";
             }
         }
-    
-        return answer;
+        
+        return "Yes";
     }
 }
