@@ -1,25 +1,18 @@
 import java.util.*;
 
+
 class Solution {
     public int[] solution(int[] arr, int divisor) {
-        List<Integer> list = new ArrayList<>();
 
-        for (int num : arr) {
-            if (num % divisor == 0) {
-                list.add(num);
-            }
-        }
+        int[] result = Arrays.stream(arr)
+                .filter(value -> value % divisor == 0)
+                .sorted()
+                .toArray();
 
-        if (list.isEmpty()) {
+        if (result.length == 0) {
             return new int[]{-1};
         }
 
-        Collections.sort(list);
-        int[] answer = new int[list.size()];
-        for (int i = 0; i < answer.length; i++) {
-            answer[i] = list.get(i);
-        }
-        
-        return answer;
+        return result;
     }
 }
