@@ -4,7 +4,7 @@ class Solution {
     public int solution(int cacheSize, String[] cities) {
         int answer = 0;
         
-        List<String> caches = new ArrayList<>();
+        List<String> caches = new LinkedList<>();
         
         // cacheSize == 0, 모두 캐시미스
         if (cacheSize == 0) {
