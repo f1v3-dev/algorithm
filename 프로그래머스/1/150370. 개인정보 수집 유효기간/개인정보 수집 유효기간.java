@@ -1,55 +1,52 @@
 import java.util.*;
-import java.time.*;
-import java.time.format.*;
 
 class Solution {
 
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+    static int currentDay;
 
     public int[] solution(String today, String[] terms, String[] privacies) {
+        List<Integer> result = new ArrayList<>();
 
-        Map<String, Integer> map = new HashMap<>();
+        Map<Character, Integer> map = new HashMap<>();
+
         for (String term : terms) {
-            String[] split = term.split(" ");
-            map.put(split[0], Integer.parseInt(split[1]));
+            String[] line = term.split(" ");
+            char key = line[0].charAt(0);
+            int value = Integer.parseInt(line[1]) * 28;
+
+            map.put(key, value);
         }
 
-        List<Integer> answer = new ArrayList<>();
+
+        currentDay = getDay(today);
 
         for (int i = 0; i < privacies.length; i++) {
-            String[] split = privacies[i].split(" ");
-            String date = split[0];
-            String term = split[1];
 
-            int termMonth = map.get(term);
+            String privacy = privacies[i];
 
-            String result = addMonth(date, termMonth);
-            System.out.println(result);
+            String[] split = privacy.split(" ");
+            int day = getDay(split[0]);
 
-            if (isAfter(today, result)) {
-                answer.add(i + 1);
+            char key = split[1].charAt(0);
+            int value = map.get(key);
+
+            // 만료일이 지났다면
+            if (currentDay - day >= value) {
+                result.add(i + 1);
             }
         }
 
-        int[] result = new int[answer.size()];
-        for (int i = 0; i < answer.size(); i++) {
-            result[i] = answer.get(i);
-        }
-
-        return result;
+        return result.stream()
+                .mapToInt(i -> i)
+                .toArray();
     }
 
-    private String addMonth(String date, int month) {
+    private static int getDay(String date) {
+        String[] line = date.split("\\.");
+        int year = Integer.parseInt(line[0]) * 12 * 28;
+        int month = Integer.parseInt(line[1]) * 28;
+        int day = Integer.parseInt(line[2]);
 
-        LocalDate localDate = LocalDate.parse(date, formatter);
-        localDate = localDate.plusMonths(month);
-        return localDate.format(formatter);
-    }
-
-    private boolean isAfter(String today, String result) {
-        LocalDate todayDate = LocalDate.parse(today, formatter);
-        LocalDate resultDate = LocalDate.parse(result, formatter).minusDays(1);
-
-        return todayDate.isAfter(resultDate);
+        return year + month + day;
     }
 }
