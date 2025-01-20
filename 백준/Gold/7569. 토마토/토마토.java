@@ -3,117 +3,103 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.StringTokenizer;
+
+class Tomato {
+    int h;
+    int n;
+    int m;
+
+    public Tomato(int h, int n, int m) {
+        this.h = h;
+        this.n = n;
+        this.m = m;
+    }
+}
 
 public class Main {
 
-    static int m;
-    static int n;
-    static int h;
-
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
-    static int[] dz = {-1, 1};
-
+    static int m, n, h;
     static int[][][] box;
-    static Queue<int[]> queue;
+    static Queue<Tomato> queue = new LinkedList<>();
+    static int remainTomato = 0;
+
+    // 상하좌우 앞뒤
+    static final int[][] DIRECTIONS = {
+            {0, 0, -1},
+            {0, 0, 1},
+            {0, -1, 0},
+            {0, 1, 0},
+            {-1, 0, 0},
+            {1, 0, 0}
+    };
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        // 3차원 배열
-        String[] input = br.readLine().split(" ");
-        queue = new LinkedList<>();
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        m = Integer.parseInt(input[0]);
-        n = Integer.parseInt(input[1]);
-        h = Integer.parseInt(input[2]);
+        m = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
+        h = Integer.parseInt(st.nextToken());
 
         box = new int[h][n][m];
 
         for (int i = 0; i < h; i++) {
-
             for (int j = 0; j < n; j++) {
-                input = br.readLine().split(" ");
+                st = new StringTokenizer(br.readLine());
 
                 for (int k = 0; k < m; k++) {
-                    int num = Integer.parseInt(input[k]);
-                    box[i][j][k] = num;
+                    box[i][j][k] = Integer.parseInt(st.nextToken());
 
-                    if (num == 1) {
-                        queue.offer(new int[]{i, j, k});
+                    if (box[i][j][k] == 1) {
+                        queue.offer(new Tomato(i, j, k));
+                    } else if (box[i][j][k] == 0) {
+                        remainTomato++;
                     }
                 }
             }
         }
 
-        bfs();
+        System.out.println(bfs());
+        br.close();
     }
 
-    private static void bfs() {
+    private static int bfs() {
 
-        int count = -1;
+        if (remainTomato == 0) {
+            return 0;
+        }
+
+        int days = -1;
 
         while (!queue.isEmpty()) {
-
             int size = queue.size();
+            days++;
 
-            for (int s = 0; s < size; s++) {
+            while (size-- > 0) {
+                Tomato current = queue.poll();
 
-                int[] current = queue.poll();
-                int ch = current[0];
-                int cn = current[1];
-                int cm = current[2];
+                for (int[] dir : DIRECTIONS) {
+                    int nh = current.h + dir[0];
+                    int nn = current.n + dir[1];
+                    int nm = current.m + dir[2];
 
-                // 상하좌우
-                for (int i = 0; i < 4; i++) {
-                    int nh = ch;
-                    int nn = cn + dx[i];
-                    int nm = cm + dy[i];
-
-                    if (nn >= 0 && nn < n && nm >= 0 && nm < m) {
-                        if (box[nh][nn][nm] == 0) {
-                            box[nh][nn][nm] = 1;
-                            queue.offer(new int[]{nh, nn, nm});
-                        }
-                    }
-                }
-
-                // 앞 뒤
-                for (int i = 0; i < 2; i++) {
-                    int nh = ch + dz[i];
-                    int nn = cn;
-                    int nm = cm;
-
-                    if (nh >= 0 && nh < h) {
-                        if (box[nh][nn][nm] == 0) {
-                            box[nh][nn][nm] = 1;
-                            queue.offer(new int[]{nh, nn, nm});
-                        }
+                    if (isValid(nh, nn, nm) && box[nh][nn][nm] == 0) {
+                        box[nh][nn][nm] = 1;
+                        queue.offer(new Tomato(nh, nn, nm));
+                        remainTomato--;
                     }
                 }
             }
-
-            count++;
         }
 
-        if (!checkTomato()) {
-            System.out.println(-1);
-        } else {
-            System.out.println(count);
-        }
+        return remainTomato == 0 ? days : -1;
     }
 
-    private static boolean checkTomato() {
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < m; k++) {
-                    if (box[i][j][k] == 0) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
+    private static boolean isValid(int nh, int nn, int nm) {
+        return nh >= 0 && nh < h
+                && nn >= 0 && nn < n
+                && nm >= 0 && nm < m;
     }
 }
