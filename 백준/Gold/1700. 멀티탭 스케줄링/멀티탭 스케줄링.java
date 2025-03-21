@@ -1,17 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-    static int n;
-    static int k;
+    static int n, k;
     static int[] arr;
-    static Set<Integer> set = new HashSet<>();
+    static List<Integer> plugs = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,54 +24,50 @@ public class Main {
             arr[i] = Integer.parseInt(input[i]);
         }
 
-        solve();
+        System.out.println(solve());
     }
 
-    private static void solve() {
-        int count = 0;
+    private static int solve() {
+        int changeCount = 0;
+
         for (int i = 0; i < k; i++) {
-            // 1. 멀티탭에 이미 꽂혀있거나, 비어있어 꽂을 수 있는 경우
-            if (set.contains(arr[i]) || isPossible(arr[i])) {
+            int curItem = arr[i];
+
+            if (plugs.contains(curItem)) {
                 continue;
             }
 
-            // 2. 새로운 전기용품을 꽂아야 하는 경우
-            // 꽂혀있는 전기용품 중 가장 나중에 사용될 것을 선택
-            Map<Integer, Integer> hm = new HashMap<>();
-            for (Integer item : set) {
-                hm.put(item, Integer.MAX_VALUE); // 초기값을 MAX로 설정
+            if (plugs.size() < n) {
+                plugs.add(curItem);
+                continue;
             }
 
-            for (int j = i + 1; j < k; j++) {
-                if (hm.containsKey(arr[j]) && hm.get(arr[j]) == Integer.MAX_VALUE) {
-                    hm.put(arr[j], j);
+            int index = -1;
+            int maxIndex = -1;
+
+            for (int j = 0; j < n; j++) {
+                int nextIndex = getLastIndex(i, plugs.get(j));
+
+                if (nextIndex > maxIndex) {
+                    maxIndex = nextIndex;
+                    index = j;
                 }
             }
 
-            // 3. Map에 저장된 값이 가장 큰 것을 제거
-            int max = -1;
-            int target = 0;
-            for (Map.Entry<Integer, Integer> entry : hm.entrySet()) {
-                if (entry.getValue() > max) {
-                    max = entry.getValue();
-                    target = entry.getKey();
-                }
-            }
-
-            set.remove(target);
-            set.add(arr[i]);
-            count++;
+            plugs.set(index, curItem);
+            changeCount++;
         }
 
-        System.out.println(count);
+        return changeCount;
     }
 
-    private static boolean isPossible(int num) {
-        if (set.size() < n) {
-            set.add(num);
-            return true;
+    private static int getLastIndex(int index, int item) {
+        for (int i = index + 1; i < k; i++) {
+            if (arr[i] == item) {
+                return i;
+            }
         }
 
-        return false;
+        return k;
     }
 }
